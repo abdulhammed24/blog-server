@@ -18,6 +18,7 @@ dbConnect();
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 // cors
 app.use(cors());
 
