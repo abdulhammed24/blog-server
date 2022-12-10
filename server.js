@@ -22,10 +22,13 @@ app.use(express.urlencoded({ extended: false }));
 // cors
 app.use(
   cors({
-    origin: "*",
-    credentials: true,
+    origin: "https://v-post.vercel.app",
   })
 );
+
+app.get("/", (req, res) => {
+  res.send("CORS solved");
+});
 
 // register and login
 app.use("/auth", userRoutes);
