@@ -20,7 +20,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // cors
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 
 // register and login
 app.use("/auth", userRoutes);
