@@ -20,15 +20,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // cors
+app.use(cors());
+const { createProxyMiddleware } = require("http-proxy-middleware");
 app.use(
-  cors({
-    origin: "https://v-post.vercel.app",
+  "/api",
+  createProxyMiddleware({
+    target: "http://localhost:8080/", //original url
+    changeOrigin: true,
+    //secure: false,
+    onProxyRes: function (proxyRes, req, res) {
+      proxyRes.headers["Access-Control-Allow-Origin"] = "*";
+    },
   })
 );
-
-app.get("/", (req, res) => {
-  res.send("CORS solved");
-});
 
 // register and login
 app.use("/auth", userRoutes);
