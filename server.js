@@ -8,6 +8,7 @@ import commentRoute from "./route/comments/commentRoute.js";
 import emailMsgRoute from "./route/emailMsg/emailMsgRoute.js";
 import categoryRoute from "./route/category/categoryRoute.js";
 import { errorHandler, notFound } from "./middlewares/error/errorHandler.js";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app = express();
 
@@ -21,16 +22,13 @@ app.use(express.urlencoded({ extended: false }));
 
 // cors
 app.use(cors());
-const { createProxyMiddleware } = require("http-proxy-middleware");
+
 app.use(
-  "/api",
   createProxyMiddleware({
-    target: "http://localhost:8080/", //original url
+    router: (req) => new URL(req.path.substring(1)),
+    pathRewrite: (path, req) => new URL(req.path.substring(1)).pathname,
     changeOrigin: true,
-    //secure: false,
-    onProxyRes: function (proxyRes, req, res) {
-      proxyRes.headers["Access-Control-Allow-Origin"] = "*";
-    },
+    logger: console,
   })
 );
 
